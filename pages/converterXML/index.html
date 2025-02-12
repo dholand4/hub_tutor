@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>converterXML</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="../../assets/logo.png" type="image/png">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Gerador de Questões para Moodle (Formato XML)</h1>
+
+        <div class="question-container">
+            <textarea id="questions" placeholder="Exemplo de questão:
+            
+1. Qual das alternativas melhor descreve o conceito de Tecnologia da Informação (TI)?
+a) Apenas o hardware utilizado para armazenar dados em uma organização.
+b) O conjunto de técnicas, processos e ferramentas utilizadas para gerenciar informações e dados. {correta} 
+c) A aplicação de robótica na produção industrial.
+d) Somente os sistemas operacionais e aplicativos utilizados por empresas.
+e) Apenas as redes de comunicação utilizadas em uma organização."></textarea>
+        </div>
+
+        <button onclick="generateXML()" class="btn">Gerar XML</button>
+
+        <div id="output-container">
+            <h3>XML Gerado:</h3>
+            <pre id="output"></pre>
+        </div>
+
+        <div class="actions">
+            <button onclick="copyText()" class="btn">Copiar Texto</button>
+            <button onclick="downloadXML()" class="btn">Baixar XML</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

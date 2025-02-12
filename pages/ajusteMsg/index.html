@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Mensagens</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="../../assets/logo.png" type="image/png">
+</head>
+
+<body>
+    <div class="main-container">
+        <!-- Seção Esquerda: Formulário -->
+        <div class="left-section">
+            <h2>Gerador de Mensagens</h2>
+            <form id="messageForm">
+                <label for="nomeAula">Nome da Aula:</label><br>
+                <input type="text" id="nomeAula" name="nomeAula" required><br>
+
+                <label for="temaAula">Tema da Aula / Disciplina: </label><br>
+                <input type="text" id="temaAula" name="temaAula" required><br>
+
+                <label for="Link">Link </label><br>
+                <input type="text" id="Link" name="Link" required><br>
+
+                <label for="dataAbertura">Data de Abertura:</label><br>
+                <input type="text" id="dataAbertura" name="dataAbertura" class="date-input" maxlength="10"
+                    placeholder="DD/MM/AAAA" required><br>
+
+                <label for="dataEncerramento">Data de Encerramento:</label><br>
+                <input type="text" id="dataEncerramento" name="dataEncerramento" class="date-input" maxlength="10"
+                    placeholder="DD/MM/AAAA" required><br>
+
+                <label for="diaSemana">Dia da Semana:</label><br>
+                <select id="diaSemana" name="diaSemana" required>
+                    <option value="SEGUNDA-FEIRA">SEGUNDA-FEIRA</option>
+                    <option value="TERÇA-FEIRA">TERÇA-FEIRA</option>
+                    <option value="QUARTA-FEIRA">QUARTA-FEIRA</option>
+                    <option value="QUINTA-FEIRA">QUINTA-FEIRA</option>
+                    <option value="SEXTA-FEIRA">SEXTA-FEIRA</option>
+                    <option value="SÁBADO">SÁBADO</option>
+                    <option value="DOMINGO">DOMINGO</option>
+                </select><br>
+
+                <label for="tipoMensagem">Tipo de Mensagem:</label><br>
+                <select id="tipoMensagem" name="tipoMensagem" required>
+                    <option value="Abertura">Mensagem de Abertura</option>
+                    <!-- <option value="Encerramento">Mensagem de Encerramento</option> -->
+                    <option value="Atividade">Mensagem de Atividade</option>
+                    <!-- <option value="Avaliação">Mensagem de Avaliação</option> -->
+                    <option value="EncerramentoZAP">EncerramentoZAP</option>
+                </select><br>
+
+                <button type="button" id="generateButton">Gerar Mensagem</button>
+            </form>
+        </div>
+
+        <!-- Seção Direita: Mensagem Gerada -->
+        <div class="right-section">
+            <h3>Mensagem Gerada:</h3>
+            <textarea id="generatedMessage" readonly></textarea>
+        </div>
+    </div>
+    <footer>
+        Daniel Holanda © 2025
+    </footer>
+    <script src="script.js"></script>
+</body>
+
+</html>
