@@ -27,9 +27,9 @@ function generateXML() {
             options = [];
             correctAnswer = '';
         }
-        // Verificar se é uma alternativa, considerando a alternativa tanto com "." quanto com ")"
-        else if (line.match(/^[a-e]\)|^[a-e]\./)) {
-            const optionLetter = line[0];
+        // Verificar se é uma alternativa, aceitando tanto a) quanto A) ou a. e A.
+        else if (line.match(/^[a-eA-E][).]/)) {
+            const optionLetter = line[0].toLowerCase(); // Converter para minúscula para padronizar
             let optionText = line.slice(2).trim();
 
             // Verificar se a alternativa está marcada como correta
@@ -38,7 +38,7 @@ function generateXML() {
                 optionText = optionText.replace('{correta}', '').trim();
             }
 
-            options.push({ letter: optionLetter, text: optionText });
+            options.push({ letter: optionLetter, text: escapeXML(optionText) });
         }
     }
 
@@ -56,7 +56,7 @@ function generateXML() {
 function generateQuestionXML(questionText, options, correctAnswer, questionCount) {
     let questionXML = `  <question type="multichoice">\n`;
     questionXML += `    <name><text>Q${questionCount}</text></name>\n`;
-    questionXML += `    <questiontext format="html">\n      <text>${questionText}</text>\n    </questiontext>\n`;
+    questionXML += `    <questiontext format="html">\n      <text>${escapeXML(questionText)}</text>\n    </questiontext>\n`;
     questionXML += `    <shuffleanswers>1</shuffleanswers>\n`; // Habilita o embaralhamento de opções
 
     for (let i = 0; i < options.length; i++) {
@@ -69,15 +69,21 @@ function generateQuestionXML(questionText, options, correctAnswer, questionCount
     return questionXML;
 }
 
+// Função para escapar caracteres especiais no XML
+function escapeXML(str) {
+    return str.replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+}
+
 // Função para copiar o texto gerado
 function copyText() {
     const output = document.getElementById('output');
-    const range = document.createRange();
-    range.selectNode(output);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-    document.execCommand('copy');
-    alert('Texto copiado para a área de transferência!');
+    navigator.clipboard.writeText(output.textContent)
+        .then(() => alert('Texto copiado para a área de transferência!'))
+        .catch(err => console.error('Erro ao copiar:', err));
 }
 
 // Função para baixar o arquivo XML
