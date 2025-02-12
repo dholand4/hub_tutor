@@ -1,149 +1,182 @@
-const BASE_URL = 'https://apibulkwhats-production.up.railway.app';
+const { Client, LocalAuth } = require('whatsapp-web.js');
+const express = require('express');
+const cors = require('cors');
+const qrcode = require('qrcode');
+const path = require('path');
+const fs = require('fs');
 
-async function authenticateWithMatricula() {
-    const matricula = document.getElementById('matricula').value.trim();
-    const statusElement = document.getElementById('qrStatus');
+const matriculasValidas = require('./matriculas.json').validas;
 
-    if (!matricula) {
-        statusElement.textContent = "Por favor, insira a matrícula.";
-        return;
+const app = express();
+const PORT = process.env.PORT || 3000; // Porta dinâmica para Railway
+
+app.use(cors({ origin: '*' })); // ⚠️ Em produção, restrinja os domínios permitidos
+app.use(express.json());
+
+const clients = new Map();
+const qrCodes = new Map();
+const authenticatedUsers = new Set();
+
+const COUNTRY_CODE = '55';
+const WHATSAPP_SUFFIX = '@c.us';
+
+app.get('/', (req, res) => {
+    res.send('API está funcionando!');
+});
+
+// 🔹 Função para formatar números corretamente
+function formatPhoneNumber(number) {
+    number = number.replace(/[^\d]/g, '');
+    if (!/^\d+$/.test(number)) {
+        throw new Error('Número inválido. Use apenas dígitos.');
     }
+    if (!number.startsWith(COUNTRY_CODE)) {
+        number = `${COUNTRY_CODE}${number}`;
+    }
+    return number.replace(/^55(\d{2})9(\d{8})$/, '55$1$2');
+}
 
+// 🔹 Remove pastas temporárias de autenticação (precisa de solução persistente para Railway)
+async function deleteFolderSafely(folderPath) {
     try {
-        const response = await fetch(`${BASE_URL}/authenticate`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ matricula }),
-        });
-
-        if (response.ok) {
-            statusElement.textContent = `Autenticação iniciada para matrícula: ${matricula}`;
-            generateQRCode(matricula);
-        } else {
-            const data = await response.json();
-            statusElement.textContent = `Erro: ${data.message}`;
+        if (fs.existsSync(folderPath)) {
+            await fs.promises.rm(folderPath, { recursive: true, force: true });
+            console.log(`Pasta de autenticação removida: ${folderPath}`);
         }
     } catch (error) {
-        console.error('Erro ao autenticar:', error);
-        statusElement.textContent = 'Erro ao conectar ao servidor.';
+        console.error(`Erro ao excluir pasta ${folderPath}:`, error);
     }
 }
 
-async function generateQRCode(matricula) {
-    const qrCodeImage = document.getElementById('qrCode');
-    const statusElement = document.getElementById('qrStatus');
-    const clearAuthButton = document.getElementById('clearAuthButton');
+// 🔹 Lida com desconexão de clientes
+async function handleDisconnection(matricula, client, dataPath) {
+    console.log(`Cliente desconectado para matrícula ${matricula}`);
+    clients.delete(matricula);
+    authenticatedUsers.delete(matricula);
 
     try {
-        const response = await fetch(`${BASE_URL}/get-qr/${matricula}`);
-
-        if (response.ok) {
-            const data = await response.json();
-
-            if (data.message === 'Já autenticado') {
-                statusElement.textContent = 'Você já foi autenticado!';
-                qrCodeImage.style.display = 'none';
-                clearAuthButton.style.display = 'none';
-                return;
-            }
-
-            if (data.qrCode) {
-                qrCodeImage.src = data.qrCode;
-                qrCodeImage.style.display = 'block';
-                statusElement.textContent = 'Escaneie o QR Code para autenticar.';
-                clearAuthButton.style.display = 'inline-block';
-            }
-
-        } else {
-            statusElement.textContent = 'Autenticando aguarde alguns segundos e tenta novamente.';
-            qrCodeImage.style.display = 'none';
-            clearAuthButton.style.display = 'none';
-        }
+        await client.destroy();
     } catch (error) {
-        console.error('Erro ao obter QR Code:', error);
-        statusElement.textContent = 'Erro ao conectar ao servidor.';
-        qrCodeImage.style.display = 'none';
-        clearAuthButton.style.display = 'none';
+        console.error(`Erro ao destruir cliente ${matricula}:`, error);
     }
+
+    await deleteFolderSafely(dataPath);
+    setTimeout(() => initializeClient(matricula), 10000);
 }
 
-function clearAuthentication() {
-    const qrCodeImage = document.getElementById('qrCode');
-    const statusElement = document.getElementById('qrStatus');
-    const clearAuthButton = document.getElementById('clearAuthButton');
-
-    qrCodeImage.style.display = 'none';
-    clearAuthButton.style.display = 'none';
-    statusElement.textContent = 'Autenticação limpa. Insira a matrícula novamente.';
-}
-
-async function sendMessage() {
-    const matricula = document.getElementById('matricula').value.trim();
-    const numbersField = document.getElementById('numbers');
-    const rawNumbers = numbersField.value.trim();
-    const messageTemplate = document.getElementById('message').value.trim();
-    const statusElement = document.getElementById('status');
-
-    if (!matricula) {
-        statusElement.textContent = "Por favor, insira sua matrícula.";
+// 🔹 Inicializa clientes do WhatsApp com parâmetro --no-sandbox para evitar erro no Railway
+function initializeClient(matricula) {
+    if (clients.has(matricula)) {
+        console.log(`Cliente para matrícula ${matricula} já está em processo de autenticação.`);
         return;
     }
 
-    if (!rawNumbers || !messageTemplate) {
-        statusElement.textContent = "Por favor, insira números e uma mensagem.";
-        return;
-    }
+    console.log(`Inicializando cliente para matrícula: ${matricula}`);
+    const dataPath = path.resolve(__dirname, `./whatsapp_auth_data/${matricula}`);
+    fs.mkdirSync(dataPath, { recursive: true });
 
-    const recipients = rawNumbers.split(',').map(entry => {
-        const [name, number] = entry.split(':').map(item => item.trim());
-        return { name: name || 'Usuário', number };
+    const client = new Client({
+        authStrategy: new LocalAuth({ clientId: matricula, dataPath: dataPath }),
+        puppeteer: {
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+        }
     });
 
-    let successCount = 0;
-    let errorCount = 0;
+    clients.set(matricula, client);
 
-    statusElement.textContent = "Iniciando envio de mensagens...";
-
-    try {
-        for (const { name, number } of recipients) {
-            const personalizedMessage = messageTemplate.replace(/{nome}/g, name);
-
-            try {
-                const response = await fetch(`${BASE_URL}/send-message`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ matricula, recipients: [{ name, number }], messageTemplate: personalizedMessage }), // Corrigir o formato
-                });
-
-                if (response.ok) {
-                    successCount++;
-                    statusElement.textContent = `Mensagem enviada para ${name || number}.`;
-                } else {
-                    const data = await response.json();
-                    errorCount++;
-                    console.error(`Erro ao enviar para ${name || number}: ${data.message}`);
-                    statusElement.textContent = `Erro ao enviar para ${name || number}: ${data.message}`;
-                }
-            } catch (error) {
-                errorCount++;
-                console.error(`Erro ao enviar para ${name || number}:`, error);
-                statusElement.textContent = `Erro ao conectar ao servidor ao enviar para ${name || number}.`;
+    client.on('qr', (qr) => {
+        qrcode.toDataURL(qr, (err, url) => {
+            if (err) {
+                console.error('Erro ao gerar QR Code:', err);
+                return;
             }
+            qrCodes.set(matricula, url);
+        });
+    });
 
-            await new Promise(resolve => setTimeout(resolve, 6000)); // 6 segundos
-        }
+    client.on('ready', () => {
+        authenticatedUsers.add(matricula);
+        qrCodes.delete(matricula);
+        console.log(`Cliente do WhatsApp para matrícula ${matricula} está pronto!`);
+    });
 
-        if (successCount > 0 && errorCount === 0) {
-            statusElement.textContent = "Envio concluído para todos os destinatários!";
-        } else if (successCount > 0) {
-            statusElement.textContent = `Envio concluído com ${successCount} sucesso(s) e ${errorCount} erro(s).`;
-        } else {
-            statusElement.textContent = "Falha ao enviar mensagens para todos os destinatários.";
-        }
-    } catch (error) {
-        console.error('Erro no envio geral:', error);
-        statusElement.textContent = 'Erro inesperado ao conectar ao servidor.';
-    }
+    client.on('auth_failure', () => {
+        console.error(`Falha de autenticação para matrícula ${matricula}`);
+        clients.delete(matricula);
+        authenticatedUsers.delete(matricula);
+    });
+
+    client.on('disconnected', (reason) => {
+        console.log(`Cliente desconectado (${reason}) para matrícula ${matricula}`);
+        handleDisconnection(matricula, client, dataPath);
+    });
+
+    client.initialize();
 }
 
-document.getElementById('clearAuthButton').addEventListener('click', clearAuthentication);
+// 🔹 Rota de autenticação
+app.post('/authenticate', (req, res) => {
+    try {
+        const { matricula } = req.body;
+        console.log(`Recebendo autenticação para matrícula: ${matricula}`);
+
+        if (!matricula || !matriculasValidas.includes(matricula)) {
+            return res.status(400).send('Matrícula inválida');
+        }
+
+        initializeClient(matricula);
+        res.status(200).send('Cliente inicializado. Aguarde o QR Code.');
+    } catch (error) {
+        console.error('Erro na autenticação:', error);
+        res.status(500).send('Erro interno.');
+    }
+});
+
+// 🔹 Obtém QR Code
+app.get('/get-qr/:matricula', (req, res) => {
+    try {
+        const { matricula } = req.params;
+
+        if (authenticatedUsers.has(matricula)) {
+            return res.status(200).json({ message: 'Já autenticado' });
+        }
+        if (qrCodes.has(matricula)) {
+            return res.status(200).json({ qrCode: qrCodes.get(matricula) });
+        }
+        res.status(404).send('QR Code não disponível');
+    } catch (error) {
+        console.error('Erro ao obter QR Code:', error);
+        res.status(500).send('Erro interno.');
+    }
+});
+
+// 🔹 Envia mensagens pelo WhatsApp
+app.post('/send-message', async (req, res) => {
+    try {
+        const { matricula, recipients, messageTemplate } = req.body;
+
+        if (!clients.has(matricula)) {
+            return res.status(400).send('Cliente não autenticado ou não inicializado');
+        }
+
+        const client = clients.get(matricula);
+
+        for (let recipient of recipients) {
+            const formattedNumber = formatPhoneNumber(recipient.number);
+            const chatId = `${formattedNumber}${WHATSAPP_SUFFIX}`;
+            const personalizedMessage = messageTemplate.replace('{name}', recipient.name);
+            await client.sendMessage(chatId, personalizedMessage);
+            console.log(`Mensagem enviada para ${recipient.name} (${formattedNumber})`);
+        }
+
+        res.status(200).send('Envio concluído');
+    } catch (error) {
+        console.error('Erro ao enviar mensagens:', error);
+        res.status(500).send('Erro ao enviar mensagem.');
+    }
+});
+
+// 🔹 Inicializa servidor
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+});
