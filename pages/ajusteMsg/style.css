@@ -24,12 +24,11 @@ footer {
 /* Contêiner Principal */
 .main-container {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-wrap: wrap;
     width: 100%;
     max-width: 1100px;
     background: linear-gradient(to bottom right, #ffffff, #7dbb88);
-    box-shadow: 0 4px 10px black;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     border-radius: 15px;
     overflow: hidden;
     margin-top: 37px;
@@ -38,16 +37,31 @@ footer {
 /* Seção Esquerda: Formulário */
 .left-section {
     flex: 1;
-    padding-top: 52px;
-    padding-bottom: 10px;
-    padding-right: 45px;
+    padding: 40px 20px;
     background: linear-gradient(to bottom right, #ffffff, #edf7f0);
     color: #227f4b;
     border-right: 2px solid rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-items: center;
-    max-height: 100vh;
+    max-height: 70vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #66bb6a #edf7f0;
+}
+
+.left-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.left-section::-webkit-scrollbar-track {
+    background: #edf7f0;
+    border-radius: 10px;
+}
+
+.left-section::-webkit-scrollbar-thumb {
+    background: #66bb6a;
+    border-radius: 10px;
 }
 
 .left-section h2 {
@@ -58,13 +72,20 @@ footer {
 
 .left-section input,
 .left-section select {
-    width: 120%;
+    width: 100%;
     max-width: 380px;
     padding: 12px;
     margin: 10px 0;
     border: 2px solid #66bb6a;
     border-radius: 8px;
     font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.left-section input:focus,
+.left-section select:focus {
+    border-color: #227f4b;
+    outline: none;
 }
 
 .left-section button {
@@ -91,10 +112,8 @@ footer {
     padding: 40px 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    background: linear-gradient(to bottom right, #f0f4f2, #edf7f0);
-    /* Ajuste no gradiente */
+    background: linear-gradient(to bottom right, #ffffff, #edf7f0);
     color: #144d27;
 }
 
@@ -106,7 +125,7 @@ footer {
 .right-section textarea {
     width: 100%;
     max-width: 380px;
-    min-height: 310px;
+    min-height: 300px;
     padding: 12px;
     border: 2px solid #2f6b32;
     border-radius: 8px;
@@ -116,6 +135,7 @@ footer {
     resize: none;
     overflow-y: auto;
     white-space: pre-wrap;
+    transition: border-color 0.3s ease;
 }
 
 .right-section textarea:focus {
@@ -138,6 +158,6 @@ footer {
     }
 
     .right-section textarea {
-        height: 200px;
+        height: 150px;
     }
 }

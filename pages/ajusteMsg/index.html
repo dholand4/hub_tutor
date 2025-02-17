@@ -11,7 +11,6 @@
 
 <body>
     <div class="main-container">
-        <!-- Seção Esquerda: Formulário -->
         <div class="left-section">
             <h2>Gerador de Mensagens</h2>
             <form id="messageForm">
@@ -34,29 +33,27 @@
 
                 <label for="diaSemana">Dia da Semana:</label><br>
                 <select id="diaSemana" name="diaSemana" required>
-                    <option value="SEGUNDA-FEIRA">SEGUNDA-FEIRA</option>
-                    <option value="TERÇA-FEIRA">TERÇA-FEIRA</option>
-                    <option value="QUARTA-FEIRA">QUARTA-FEIRA</option>
-                    <option value="QUINTA-FEIRA">QUINTA-FEIRA</option>
-                    <option value="SEXTA-FEIRA">SEXTA-FEIRA</option>
-                    <option value="SÁBADO">SÁBADO</option>
-                    <option value="DOMINGO">DOMINGO</option>
+                    <option value="Segunda-Feira">Segunda-Feira</option>
+                    <option value="Terça-Feira">Terça-Feira</option>
+                    <option value="Quarta-Feira">Quarta-Feira</option>
+                    <option value="Quinta-Feira">Quinta-Feira</option>
+                    <option value="Sexta-Feira">Sexta-Feira</option>
+                    <option value="Sábado">Sábado</option>
+                    <option value="Domingo">Domingo</option>
                 </select><br>
 
                 <label for="tipoMensagem">Tipo de Mensagem:</label><br>
                 <select id="tipoMensagem" name="tipoMensagem" required>
                     <option value="Abertura">Mensagem de Abertura</option>
-                    <!-- <option value="Encerramento">Mensagem de Encerramento</option> -->
                     <option value="Atividade">Mensagem de Atividade</option>
-                    <!-- <option value="Avaliação">Mensagem de Avaliação</option> -->
                     <option value="EncerramentoZAP">EncerramentoZAP</option>
+                    <option value="EncerramentoAtividadeZap">EncerramentoAtividadeZap</option>
                 </select><br>
 
                 <button type="button" id="generateButton">Gerar Mensagem</button>
             </form>
         </div>
 
-        <!-- Seção Direita: Mensagem Gerada -->
         <div class="right-section">
             <h3>Mensagem Gerada:</h3>
             <textarea id="generatedMessage" readonly></textarea>
