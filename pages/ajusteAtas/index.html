@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ata de Reunião</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>Gerador de Ata de Reunião</h1>
+        <form id="ataForm">
+            <label for="disciplinas">Nome das disciplinas:</label>
+            <input type="text" id="disciplinas" required>
+
+            <label for="data">Data da reunião:</label>
+            <input type="date" id="data" required>
+
+            <label>Presentes:</label>
+            <div id="presentes-container">
+                <input type="text" class="presentes" placeholder="Nome do participante">
+            </div>
+            <button type="button" onclick="adicionarParticipante()">Adicionar Participante</button>
+
+            <label for="pauta">Pauta da reunião:</label>
+            <textarea id="pauta" rows="3" required></textarea>
+
+            <label for="acoes">Encaminhamentos e Próximas Ações:</label>
+            <textarea id="acoes" rows="3" required></textarea>
+
+            <label for="encerramento">Encerramento:</label>
+            <textarea id="encerramento" rows="2" required></textarea>
+
+            <button type="button" onclick="gerarPrevia()">Visualizar Ata</button>
+            <button type="button" onclick="gerarWord()">Baixar Word</button>
+        </form>
+
+        <div id="previa" class="previa"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

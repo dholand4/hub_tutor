@@ -1,0 +1,113 @@
+/* Estilos globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom right, #ffffff, #7dbb88);
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    /* Evitar que o scroll apareça no corpo */
+}
+
+/* Container principal */
+.container {
+    background-color: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    /* Permitir scroll dentro do container */
+    max-height: 90vh;
+    /* Limitar o container para não ultrapassar a tela */
+}
+
+/* Título */
+h1 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+/* Labels */
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+/* Entrada de texto e área de texto */
+input,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Área de texto */
+textarea {
+    height: 200px;
+    font-size: 1.2em;
+    resize: vertical;
+}
+
+/* Botões */
+button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-top: 15px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Ações (Copiar e Baixar) */
+.actions {
+    margin-top: 20px;
+}
+
+/* Caixa de output */
+#output-container {
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    text-align: left;
+    max-height: 400px;
+    /* Limitar a altura */
+    overflow-y: auto;
+    /* Scroll funcional dentro do container */
+    word-wrap: break-word;
+    flex-grow: 1;
+    /* Garante que o container expanda corretamente */
+}
+
+
+/* Preformatação */
+pre {
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
