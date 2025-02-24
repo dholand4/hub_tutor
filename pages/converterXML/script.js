@@ -10,25 +10,32 @@ function generateXML() {
     let questionText = '';
     let options = [];
     let correctAnswer = '';
+    let isCapturingQuestion = false;
 
     for (let i = 0; i < questionsArray.length; i++) {
         const line = questionsArray[i].trim();
 
-        // Verificar se é uma nova questão
-        if (line.match(/^\d+\./)) {
+        // Verificar se é o início de uma nova questão
+        if (line.match(/^\d+[.)]/)) {
             // Se já houver uma questão anterior, gerar XML
             if (questionText !== '') {
                 xmlOutput += generateQuestionXML(questionText, options, correctAnswer, questionCount);
                 questionCount++;
             }
 
-            // Definir nova questão
+            // Iniciar uma nova questão
             questionText = line.slice(3).trim(); // Remover "1. " ou "2. ", etc.
             options = [];
             correctAnswer = '';
+            isCapturingQuestion = true;
         }
-        // Verificar se é uma alternativa, aceitando tanto a) quanto A) ou a. e A.
+        // Continuar capturando enunciado da questão até encontrar uma alternativa
+        else if (isCapturingQuestion && !line.match(/^[a-eA-E][).]/)) {
+            questionText += ' ' + line; // Adicionar à questão
+        }
+        // Verificar se é uma alternativa, aceitando tanto "a)" quanto "A)" ou "a." e "A."
         else if (line.match(/^[a-eA-E][).]/)) {
+            isCapturingQuestion = false; // Parar de capturar o enunciado
             const optionLetter = line[0].toLowerCase(); // Converter para minúscula para padronizar
             let optionText = line.slice(2).trim();
 
