@@ -5,25 +5,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Encontros</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Inclua seu CSS aqui -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <div class="container">
         <h1>Agendar Encontros</h1>
         <form id="form">
-            <input type="text" name="turma" placeholder="Turma" required>
             <input type="text" name="professor" placeholder="Professor" required>
             <input type="text" name="tutor" placeholder="Tutor" required>
             <input type="text" name="disciplina" placeholder="Disciplina" required>
-            <input type="date" name="data" placeholder="Data" required>
-            <input type="time" name="hora" placeholder="Hora" required>
+            <input type="date" name="data" required>
+            <input type="time" name="hora" required>
             <input type="url" name="link" placeholder="Link" required>
             <button type="submit">Salvar Encontro</button>
         </form>
-        <div id="output-container"></div>
+
+        <h2>Encontros Agendados</h2>
+        <input type="text" id="search" onkeyup="filterTable()" placeholder="Filtrar encontros...">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Professor</th>
+                    <th>Tutor</th>
+                    <th>Disciplina</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Link</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
     </div>
-    <script src="script.js"></script> <!-- Inclua seu JS aqui -->
+
+    <script src="script.js"></script>
 </body>
 
 </html>
