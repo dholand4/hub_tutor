@@ -1,37 +1,33 @@
 // Variáveis para facilitar a alteração dos links das APIs
 const BASE_AGENDAMENTOS = "https://script.google.com/macros/s/AKfycbzQOkqHyloN1TpWWbylaQ2XZBlNT6omftPxHpBANhZvbxsiz6tg8LvAQbrSVcZXRuWq0w/exec";
-const BASE_PROFESSORES = "https://script.googleusercontent.com/a/macros/unicatolicaquixada.edu.br/echo?user_content_key=vXe_cqFAcxSwcY7341uCETW_B40oJzahlI6u8Bczg7r55SZw-_BJIIASzGo40Rgw4w2SnV62rl2aiQg818l2As2PYXYhUW8BOJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMi80zadyHLKBUfEe4Pyxx62tO4i_dSTocYYRrV3-qoNpX1fwwE55bXuCMOOgN8AGmRn4Imvk4yXwGDWdC5A_f4ESihW7l5biRQ26XJfAy-moy33YiZIHE9WGqSbi45wHis1TTyuu29W5SFwKCi6E3ojBnqtDxK_me8rKKYTkwNXhRVMkLAU9H3dWQ3YoVX3Fp&lib=MkAHc8-m_at_uRQSO7M6hN_h5REasFrxn"; // Substitua com a URL correta da API dos professores
+const BASE_PROFESSORES = "https://script.googleusercontent.com/a/macros/unicatolicaquixada.edu.br/echo?user_content_key=vXe_cqFAcxSwcY7341uCETW_B40oJzahlI6u8Bczg7r55SZw-_BJIIASzGo40Rgw4w2SnV62rl2aiQg818l2As2PYXYhUW8BOJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMi80zadyHLKBUfEe4Pyxx62tO4i_dSTocYYRrV3-qoNpX1fwwE55bXuCMOOgN8AGmRn4Imvk4yXwGDWdC5A_f4ESihW7l5biRQ26XJfAy-moy33YiZIHE9WGqSbi45wHis1TTyuu29W5SFwKCi6E3ojBnqtDxK_me8rKKYTkwNXhRVMkLAU9H3dWQ3YoVX3Fp&lib=MkAHc8-m_at_uRQSO7M6hN_h5REasFrxn";
 
 // Função para carregar a lista de professores na opção select
 function loadProfessores() {
-    fetch(BASE_PROFESSORES) // Usando a variável BASE_PROFESSORES
+    fetch(BASE_PROFESSORES)
         .then(response => {
-            // Verifica se a resposta da API está ok
             if (!response.ok) {
                 throw new Error('Erro na resposta da API: ' + response.statusText);
             }
             return response.json();
         })
         .then(data => {
-            console.log("Dados de professores recebidos:", data); // Log de depuração
+            console.log("Dados de professores recebidos:", data);
 
             const professorSelect = document.getElementById("professor");
 
-            // Limpar as opções atuais
             professorSelect.innerHTML = '<option value="">Selecione o Professor</option>';
 
-            // Verifique se a lista de professores é válida e um array
             if (Array.isArray(data) && data.length > 0) {
-                // Adicionar as opções de professores
                 data.forEach(professor => {
                     const option = document.createElement("option");
-                    option.value = professor; // Usa o nome como valor e texto
+                    option.value = professor;
                     option.textContent = professor;
                     professorSelect.appendChild(option);
                 });
             } else {
                 console.error("A resposta da API não contém a lista esperada de professores.");
-                alert("Erro ao carregar a lista de professores. Verifique a API.");
+                alert("Erro ao carregar a lista de professores.");
             }
         })
         .catch(error => {
@@ -41,28 +37,23 @@ function loadProfessores() {
 }
 
 
-
 // Função para carregar os encontros da planilha
 function loadEncontros() {
-    fetch(BASE_AGENDAMENTOS) // Usando a variável BASE_AGENDAMENTOS
+    fetch(BASE_AGENDAMENTOS)
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById("table-body");
             tableBody.innerHTML = "";
 
-            // Pular a primeira linha se for o cabeçalho
             data.slice(1).forEach((encontro, index) => {
-                // Verificar se os dados são válidos antes de exibir
                 if (!encontro.data || !encontro.hora) return;
 
-                // Formatar data para DD/MM/AAAA
                 let dataFormatada = new Date(encontro.data).toLocaleDateString("pt-BR", {
                     day: "2-digit",
                     month: "2-digit",
                     year: "numeric"
                 });
 
-                // Formatar hora para HH:mm
                 let horaFormatada = new Date(encontro.hora).toLocaleTimeString("pt-BR", {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -101,7 +92,7 @@ function filterTable() {
 // Carrega os encontros e professores ao iniciar a página
 window.onload = () => {
     loadEncontros();
-    loadProfessores(); // Carregar a lista de professores
+    loadProfessores();
 };
 
 // Manipulador de evento para o formulário
@@ -128,13 +119,14 @@ document.getElementById("form").addEventListener("submit", function (event) {
         }
     }
 
-    fetch(BASE_AGENDAMENTOS, { // Usando a variável BASE_AGENDAMENTOS
+    // Agora voltamos ao envio original com FormData
+    fetch(BASE_AGENDAMENTOS, {
         method: "POST",
         body: formData
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok: ' + response.statusText);
+                throw new Error('Erro na resposta da API: ' + response.statusText);
             }
             return response.text();
         })

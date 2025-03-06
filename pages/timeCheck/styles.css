@@ -96,6 +96,25 @@ th {
     background: darkred;
 }
 
+select {
+    padding: 8px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 100%;
+    background-color: white;
+    cursor: pointer;
+    /* Adiciona o cursor pointer para indicar que é clicável */
+}
+
+/* Garantir que o select se comporte da mesma maneira em telas menores */
+@media (max-width: 768px) {
+    select {
+        padding: 6px;
+    }
+}
+
+
 /* Estilos para responsividade */
 @media (max-width: 768px) {
     .container {
