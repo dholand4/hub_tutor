@@ -12,12 +12,10 @@
     <div class="container">
         <h1>Agendar Encontros</h1>
         <form id="form">
-            <select id="professor">
+            <select id="professor" name="professor">
                 <option value="">Selecione o Professor</option>
             </select>
-            <select id="tutor">
-                <option value="">Selecione o Tutor</option>
-            </select>
+            <input type="text" name="tutor" placeholder="Tutor" required>
             <input type="text" name="disciplina" placeholder="Disciplina" required>
             <input type="date" name="data" required>
             <input type="time" name="hora" required>
