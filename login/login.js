@@ -1,8 +1,9 @@
 // Verifica se o usuário está logado ao acessar qualquer página restrita
 if (!localStorage.getItem("loggedIn")) {
     const currentPath = window.location.pathname;
-    if (!currentPath.includes("login.html")) {
-        window.location.href = "/login.html"; // Redireciona para o login, garantindo o caminho correto
+    // Verifica se o caminho atual não inclui index.html (login), para redirecionar para a página de login
+    if (!currentPath.includes("/index.html")) {
+        window.location.href = "/index.html"; // Caminho correto para a página de login
     }
 }
 
@@ -14,14 +15,15 @@ document.getElementById("login-form").addEventListener("submit", async function 
     const errorMessage = document.getElementById("error-message");
 
     try {
-        const response = await fetch("usuarios.json");
+        // Caminho correto para o arquivo de usuários
+        const response = await fetch("/login/usuarios.json");  // Ajustando o caminho para o arquivo JSON
         const users = await response.json();
 
         const validUser = users.find(user => user.username === username && user.password === password);
 
         if (validUser) {
             localStorage.setItem("loggedIn", "true");
-            window.location.href = "/pages/hub/index.html"; // Redireciona para a tela principal
+            window.location.href = "/pages/hub/index.html"; // Caminho correto para a página principal após login
         } else {
             errorMessage.style.display = "block";
         }
