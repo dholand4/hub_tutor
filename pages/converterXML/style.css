@@ -1,4 +1,3 @@
-/* Estilos globais */
 * {
     margin: 0;
     padding: 0;
@@ -18,7 +17,6 @@ body {
     overflow: auto;
 }
 
-/* Container principal */
 .container {
     background-color: #ffffff;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -28,18 +26,15 @@ body {
     border-radius: 10px;
     text-align: center;
     overflow: auto;
-    /* Permite rolagem no conteúdo */
     display: flex;
     flex-direction: column;
 }
 
-/* Título */
 h1 {
     font-size: 1.8em;
     margin-bottom: 20px;
 }
 
-/* Área de texto */
 textarea {
     width: 100%;
     height: 200px;
@@ -51,7 +46,6 @@ textarea {
     resize: vertical;
 }
 
-/* Botões */
 button {
     padding: 10px 20px;
     background-color: #4CAF50;
@@ -67,12 +61,10 @@ button:hover {
     background-color: #45a049;
 }
 
-/* Ações (Copiar e Baixar) */
 .actions {
     margin-top: 20px;
 }
 
-/* Caixa de output */
 #output-container {
     margin-top: 20px;
     background-color: #f9f9f9;
@@ -83,9 +75,7 @@ button:hover {
     text-align: left;
     overflow-wrap: break-word;
     max-height: 800px;
-    /* Aumenta a altura máxima */
     overflow-y: scroll;
-    /* Adiciona rolagem no container de XML */
 }
 
 pre {

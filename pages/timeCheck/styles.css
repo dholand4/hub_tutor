@@ -11,7 +11,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* Mudado para centralizar verticalmente */
     align-items: center;
     min-height: 100vh;
     margin: 0;
@@ -25,7 +24,6 @@ h2 {
     font-size: 25px;
 }
 
-
 .container {
     background-color: #ffffff;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -35,9 +33,7 @@ h2 {
     border-radius: 10px;
     text-align: center;
     margin: 20px 0;
-    /* Margem para espaçamento em cima e embaixo */
     transition: all 0.3s ease;
-    /* Adiciona transição suave */
 }
 
 form {
@@ -112,26 +108,72 @@ select {
     width: 100%;
     background-color: white;
     cursor: pointer;
-    /* Adiciona o cursor pointer para indicar que é clicável */
 }
 
-/* Garantir que o select se comporte da mesma maneira em telas menores */
+/* Media Query for Tablets and Mobile Devices */
 @media (max-width: 768px) {
+
+    h1,
+    h2 {
+        font-size: 20px;
+    }
+
+    .container {
+        padding: 15px;
+        width: 95%;
+        margin: 10px;
+    }
+
+    input,
     select {
-        padding: 6px;
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    button {
+        padding: 6px 12px;
+        font-size: 0.9em;
+    }
+
+    table {
+        font-size: 0.9em;
+        margin: 10px 0;
+    }
+
+    th,
+    td {
+        padding: 8px;
     }
 }
 
-
-/* Estilos para responsividade */
-@media (max-width: 768px) {
+/* Media Query for Small Screens */
+@media (max-width: 480px) {
     .container {
-        padding: 15px;
-        /* Menos padding em telas menores */
+        padding: 10px;
+    }
+
+    input,
+    select {
+        padding: 8px;
+        font-size: 0.85em;
     }
 
     button {
         padding: 6px 10px;
-        /* Ajuste de padding para botões em telas menores */
+        font-size: 0.85em;
+    }
+
+    table {
+        font-size: 0.85em;
+    }
+
+    th,
+    td {
+        padding: 6px;
+    }
+
+    h1,
+    h2 {
+        font-size: 18px;
     }
 }

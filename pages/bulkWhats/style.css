@@ -69,11 +69,8 @@ a {
     margin-top: 103px;
     display: flex;
     justify-content: space-between;
-    /* Garante um item em cada lado */
     align-items: center;
-    /* Alinha os itens verticalmente */
     gap: 20px;
-    /* Espaço entre os itens (flexbox) */
 }
 
 
