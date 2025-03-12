@@ -1,6 +1,7 @@
 // URLs das APIs
 const BASE_AGENDAMENTOS = "https://script.google.com/macros/s/AKfycbzQOkqHyloN1TpWWbylaQ2XZBlNT6omftPxHpBANhZvbxsiz6tg8LvAQbrSVcZXRuWq0w/exec";
 const BASE_PROFESSORES = "https://script.googleusercontent.com/a/macros/unicatolicaquixada.edu.br/echo?user_content_key=vXe_cqFAcxSwcY7341uCETW_B40oJzahlI6u8Bczg7r55SZw-_BJIIASzGo40Rgw4w2SnV62rl2aiQg818l2As2PYXYhUW8BOJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMi80zadyHLKBUfEe4Pyxx62tO4i_dSTocYYRrV3-qoNpX1fwwE55bXuCMOOgN8AGmRn4Imvk4yXwGDWdC5A_f4ESihW7l5biRQ26XJfAy-moy33YiZIHE9WGqSbi45wHis1TTyuu29W5SFwKCi6E3ojBnqtDxK_me8rKKYTkwNXhRVMkLAU9H3dWQ3YoVX3Fp&lib=MkAHc8-m_at_uRQSO7M6hN_h5REasFrxn";
+const BASE_DISCIPLINAS = "https://script.googleusercontent.com/a/macros/unicatolicaquixada.edu.br/echo?user_content_key=AehSKLiLhq1pWoXUFfT-y5sXqz6uwHttEilzw6of2cneR4RI53D9I9PmmpFHSCMYqTYgqT7LIopTuXfR7sN0QK0sGGqXjcOtYNvIaP8Eqf4ZJc9ZnO4lev7OvKKppNqxt-waXoZGHsho7binceRxMKva83oCNgt_d9jpHAPFyP1Fgp907VgBDR8N1qsnfUItnzm5FLemX9H9TkwbwC_fyDazjkC8u2CGcTBUHr8PrTS6OjH8HGsGQAC7STgd9yphVvhl_PPKW-KcPybCtbt_HZhCMDNDD08pzTExlsK_fTqGi-701nLzeCtMcU4qWASj0yW-Qf_fd2SwSsj6do1tBzoCjarspojWKRXnoPP24tmK&lib=MirWo9XklGPvoq1CEnLYaafh5REasFrxn";
 
 // Carregar professores no campo de pesquisa
 function loadProfessores() {
@@ -17,6 +18,23 @@ function loadProfessores() {
             });
         })
         .catch(error => console.error("Erro ao carregar professores:", error));
+}
+
+// Carregar disciplinas no campo de pesquisa
+function loadDisciplinas() {
+    fetch(BASE_DISCIPLINAS)
+        .then(res => res.json())
+        .then(data => {
+            const datalist = document.getElementById("disciplinas");
+            datalist.innerHTML = "";
+
+            data.forEach(disciplina => {
+                const option = document.createElement("option");
+                option.value = disciplina;
+                datalist.appendChild(option);
+            });
+        })
+        .catch(error => console.error("Erro ao carregar disciplinas:", error));
 }
 
 // Carregar encontros agendados
@@ -122,4 +140,5 @@ document.getElementById("form").addEventListener("submit", function (event) {
 window.onload = () => {
     loadEncontros();
     loadProfessores();
+    loadDisciplinas(); // Agora carrega as disciplinas também
 };
