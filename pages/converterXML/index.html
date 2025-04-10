@@ -10,31 +10,33 @@
 </head>
 
 <body>
-
     <div class="container">
         <h1>Gerador de Questões para Moodle (Formato XML)</h1>
 
         <div class="question-container">
             <textarea id="questions" placeholder="Exemplo de questão:
-            
+
 1. Qual das alternativas melhor descreve o conceito de Tecnologia da Informação (TI)?
 a) Apenas o hardware utilizado para armazenar dados em uma organização.
-b) O conjunto de técnicas, processos e ferramentas utilizadas para gerenciar informações e dados. {correta} 
+b) O conjunto de técnicas, processos e ferramentas utilizadas para gerenciar informações e dados. {correta}
 c) A aplicação de robótica na produção industrial.
 d) Somente os sistemas operacionais e aplicativos utilizados por empresas.
 e) Apenas as redes de comunicação utilizadas em uma organização."></textarea>
         </div>
 
         <button onclick="generateXML()" class="btn">Gerar XML</button>
+    </div>
 
-        <div id="output-container">
+    <!-- Modal -->
+    <div id="xmlModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
             <h3>XML Gerado:</h3>
-            <pre id="output"></pre>
-        </div>
-
-        <div class="actions">
-            <button onclick="copyText()" class="btn">Copiar Texto</button>
-            <button onclick="downloadXML()" class="btn">Baixar XML</button>
+            <pre id="output" class="xml-box"></pre>
+            <div class="actions">
+                <button onclick="copyText()" class="btn">Copiar Texto</button>
+                <button onclick="downloadXML()" class="btn">Baixar XML</button>
+            </div>
         </div>
     </div>
 
