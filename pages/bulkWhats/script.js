@@ -1,5 +1,5 @@
 // const BASE_URL = 'https://apibulkwhats-production.up.railway.app';
-const BASE_URL = 'http://172.16.0.26:3000';
+const BASE_URL = 'http://172.16.0.239:3000';
 
 async function authenticateWithMatricula() {
     const matricula = document.getElementById('matricula').value.trim();

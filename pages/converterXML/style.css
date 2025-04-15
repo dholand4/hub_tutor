@@ -13,7 +13,6 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
     overflow: auto;
 }
 
@@ -29,7 +28,6 @@ body.modal-open {
     max-width: 1100px;
     border-radius: 15px;
     text-align: center;
-    overflow: auto;
     display: flex;
     flex-direction: column;
     color: #0d47a1;
@@ -40,6 +38,32 @@ h1 {
     font-size: 2em;
     margin-bottom: 25px;
     color: #1565c0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.info-btn {
+    background-color: #ffffff;
+    font-size: 0.55em;
+    font-weight: bold;
+    border: 2px solid #64b5f6;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: 0 2px 6px rgba(100, 181, 246, 0.3);
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.info-btn:hover {
+    background-color: #e3f2fd;
+    transform: scale(1.1);
 }
 
 textarea {
@@ -53,7 +77,6 @@ textarea {
     resize: vertical;
     background-color: #f0faff;
     color: #0d47a1;
-    transition: border-color 0.3s;
 }
 
 textarea:focus {
@@ -72,7 +95,6 @@ button {
     font-size: 1.1em;
     font-weight: 500;
     transition: background 0.3s, transform 0.2s;
-    box-shadow: 0 4px 12px rgba(66, 165, 245, 0.4);
 }
 
 button:hover {
@@ -88,7 +110,6 @@ button:hover {
     flex-wrap: wrap;
 }
 
-/* Modal */
 .modal {
     display: none;
     position: fixed;
@@ -98,7 +119,6 @@ button:hover {
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
 }
@@ -107,7 +127,6 @@ button:hover {
     background: linear-gradient(to bottom, #ffffff, #e3f2fd);
     margin: auto;
     padding: 30px;
-    border: none;
     width: 85%;
     max-width: 900px;
     border-radius: 15px;
@@ -116,9 +135,8 @@ button:hover {
     display: flex;
     flex-direction: column;
     max-height: 80vh;
-    overflow: hidden;
+    overflow: auto;
     box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
-    color: #0d47a1;
 }
 
 pre.xml-box {
@@ -132,7 +150,6 @@ pre.xml-box {
     overflow-y: auto;
     margin-bottom: 20px;
     border: 1px solid #bbdefb;
-    color: #0d47a1;
 }
 
 .modal-content h3 {
@@ -149,9 +166,53 @@ pre.xml-box {
     font-size: 30px;
     font-weight: bold;
     cursor: pointer;
-    transition: color 0.3s;
 }
 
 .close:hover {
     color: #000;
+}
+
+.modal-content p {
+    font-size: 1.05em;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.modal-content ul {
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+.modal-content ul li {
+    margin-bottom: 12px;
+    line-height: 1.5;
+    font-size: 1em;
+}
+
+.modal-content code {
+    background-color: #e1f5fe;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.95em;
+}
+
+.modal-content pre {
+    background-color: #f0f8ff;
+    padding: 18px;
+    border-left: 4px solid #64b5f6;
+    border-radius: 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95em;
+    overflow-x: auto;
+}
+
+footer {
+    color: #075192;
+    text-align: center;
+    padding: 25px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 0.9em;
+    font-weight: 500;
 }

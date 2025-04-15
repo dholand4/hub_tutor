@@ -4,33 +4,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>converterXML</title>
+    <title>Gerador de Questões para Moodle (Formato XML)</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="../../assets/logo.png" type="image/png">
 </head>
 
 <body>
     <div class="container">
-        <h1>Gerador de Questões para Moodle (Formato XML)</h1>
+        <h1>Gerador de Questões para Moodle (Formato XML)
+            <button class="info-btn" onclick="toggleModal('infoModal', true)">i</button>
+        </h1>
 
         <div class="question-container">
-            <textarea id="questions" placeholder="Exemplo de questão:
-
-1. Qual das alternativas melhor descreve o conceito de Tecnologia da Informação (TI)?
-a) Apenas o hardware utilizado para armazenar dados em uma organização.
-b) O conjunto de técnicas, processos e ferramentas utilizadas para gerenciar informações e dados. {correta}
-c) A aplicação de robótica na produção industrial.
-d) Somente os sistemas operacionais e aplicativos utilizados por empresas.
-e) Apenas as redes de comunicação utilizadas em uma organização."></textarea>
+            <textarea id="questions" placeholder="Digite suas questões aqui..."></textarea>
         </div>
 
         <button onclick="generateXML()" class="btn">Gerar XML</button>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal de Informações -->
+    <div id="infoModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content">
+            <h3>Como Utilizar o Sistema</h3>
+            <p>Este sistema permite gerar questões no formato XML compatível com o Moodle. Para utilizá-lo corretamente,
+                siga as instruções abaixo:</p>
+            <ul>
+                <li>Digite suas questões no campo de texto, utilizando uma linha para cada pergunta.</li>
+                <li>Cada questão deve começar com a numeração sequencial, como <strong>1.</strong>, <strong>2.</strong>,
+                    <strong>3.</strong>, e assim por diante.
+                </li>
+                <li>Inclua as alternativas com as letras de <strong>a)</strong> até <strong>e)</strong>, uma por linha,
+                    logo abaixo da respectiva questão.</li>
+                <li>Marque a alternativa correta adicionando a tag <code>{correta}</code> ou <code>{correto}</code> ao
+                    final da alternativa correta.</li>
+                <li>Exemplo de questões:
+                    <pre>1. Qual é a capital do Brasil?
+a) São Paulo
+b) Rio de Janeiro
+c) Brasília {correta}
+d) Salvador
+e) Belo Horizonte
+
+2. Qual é a capital do estado do Ceará?
+a) Sobral
+b) Juazeiro do Norte
+c) Crato
+d) Fortaleza {correto}
+e) Quixadá</pre>
+                </li>
+            </ul>
+            <p>Após inserir todas as questões, clique no botão <strong>"Gerar XML"</strong> para obter o arquivo no
+                formato adequado para importação no Moodle.</p>
+        </div>
+    </div>
+
+    <!-- Modal de Exibição XML -->
     <div id="xmlModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" onclick="toggleModal('xmlModal', false)">&times;</span>
             <h3>XML Gerado:</h3>
             <pre id="output" class="xml-box"></pre>
             <div class="actions">
@@ -39,6 +70,10 @@ e) Apenas as redes de comunicação utilizadas em uma organização."></textarea
             </div>
         </div>
     </div>
+
+    <footer>
+        <p>Daniel Holanda © 2025</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
